@@ -1,60 +1,77 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 
+const BookingForm = ({ onSubmit }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    date: "",
+    time: "",
+    guests: 1,
+  });
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-const BookingForm = (props) => {
-
-   const [occasion, setOccasion] = useState("");
-   const [guests, setGuests] = useState("");
-   const [date, setDate] = useState("");
-   const [times, setTimes] = useState("")
-
-   const handleSumbit = (e) => {
-   e.preventDefault();
-   props.submitForm(e);
-   };
-
-   const handleChange = (e) => {
-    setDate(e);
-    props.dispatch(e);
-   }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+    alert("Booking submitted successfully!");
+    setFormData({ name: "", date: "", time: "", guests: 1 });
+  };
 
   return (
-    <header>
-      <section>
-        <form onSubmit={handleSumbit}>
-          <fieldset>
-            <div>
-              <label htmlFor="book-date">Choose Date</label>
-              <input id="book-date" value={date} onChange={(e) => handleChange(e.target.value)} type="date" required/>
-            </div>
-            <div>
-              <label htmlFor="book-time">Choose Time</label>
-              <select id="book-time" value={times} onChange={(e) => setTimes(e.target.value)} required>
-                <option value="">Select a Time</option>
-               {props.availableTimes.availableTimes.map(availableTimes => {return <option key={availableTimes}>{availableTimes}</option>})}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="book-guests">Number of Guests</label>
-              <input id="book-guests" min="1" value={guests} onChange={(e) => {setGuests(e.target.value)}} type={"number"} placeholder={0} max={10} required></input>
-            </div>
-            <div>
-              <label htmlFor="book-occasion">Occasion</label>
-              <select id="book-occasion" key={occasion} value={occasion} onChange={(e) => setOccasion(e.target.value)} required>
-                <option value="">Select an Option</option>
-                <option>Birthday</option>
-                <option>Anniversary</option>
-              </select>
-            </div>
-            <div>
-              <input aria-label="On Click" type={"submit"} value={"Make Your Reservation"}></input>
-            </div>
-          </fieldset>
-        </form>
-      </section>
-    </header>
+    <div className="max-w-md mx-auto p-4 bg-white shadow-md rounded-md sm:p-6">
+      <h2 className="text-2xl font-bold mb-4 text-center text-yellow-600">
+        Book a Table
+      </h2>
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="Your Name"
+          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          required
+        />
+        <input
+          type="date"
+          name="date"
+          value={formData.date}
+          onChange={handleChange}
+          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          required
+        />
+        <input
+          type="time"
+          name="time"
+          value={formData.time}
+          onChange={handleChange}
+          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          required
+        />
+        <input
+          type="number"
+          name="guests"
+          value={formData.guests}
+          min="1"
+          max="20"
+          onChange={handleChange}
+          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          required
+        />
+        <button
+          type="submit"
+          className="w-full bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600 transition"
+        >
+          Reserve Table
+        </button>
+      </form>
+    </div>
   );
 };
 
